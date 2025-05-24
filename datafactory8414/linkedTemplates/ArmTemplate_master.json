@@ -1,0 +1,70 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "datafactory8414"
+		},
+		"Source_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'Source'"
+		},
+		"sink_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'sink'"
+		},
+		"Source_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://mystorageacct8414.dfs.core.windows.net/"
+		},
+		"sink_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://mystorageacct8414.dfs.core.windows.net/"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "datafactory8414_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"Source_accountKey": {
+						"value": "[parameters('Source_accountKey')]"
+					},
+					"sink_accountKey": {
+						"value": "[parameters('sink_accountKey')]"
+					},
+					"Source_properties_typeProperties_url": {
+						"value": "[parameters('Source_properties_typeProperties_url')]"
+					},
+					"sink_properties_typeProperties_url": {
+						"value": "[parameters('sink_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
