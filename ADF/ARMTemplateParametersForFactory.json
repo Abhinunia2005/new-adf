@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "factoryName": {
+            "value": "datafactory8414"
+        },
+        "Source_accountKey": {
+            "value": ""
+        },
+        "sink_accountKey": {
+            "value": ""
+        },
+        "Source_properties_typeProperties_url": {
+            "value": "https://mystorageacct8414.dfs.core.windows.net/"
+        },
+        "sink_properties_typeProperties_url": {
+            "value": "https://mystorageacct8414.dfs.core.windows.net/"
+        }
+    }
+}
