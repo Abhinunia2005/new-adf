@@ -1,0 +1,53 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  azureSubscription: 'Abhinunia2005'
+  resourceGroup: 'myResourceGroup'
+  dataFactoryName: 'datafactory8414'
+  location: 'eastus2'
+  subscriptionId: 'fbbf2c3a-bb8f-4058-8e4b-6986bff47cc2'
+
+stages:
+  - stage: Build
+    displayName: 'Build Artifact'
+    jobs:
+      - job: Build
+        steps:
+          - checkout: self
+          - publish: $(System.DefaultWorkingDirectory)/ADF
+            artifact: adf-arm-template
+
+  - stage: Deploy
+    displayName: 'Deploy to Production'
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - deployment: DeployADF
+        displayName: 'Deploy ARM Template to ADF'
+        environment: 'Production' # Enables approval gate in DevOps
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: adf-arm-template
+
+                - task: AzureResourceManagerTemplateDeployment@3
+                  displayName: 'Deploy ADF ARM Template'
+                  inputs:
+                    deploymentScope: 'Resource Group'
+                    azureResourceManagerConnection: $(azureSubscription)
+                    subscriptionId: $(subscriptionId)
+                    action: 'Create Or Update Resource Group'
+                    resourceGroupName: $(resourceGroup)
+                    location: $(location)
+                    templateLocation: 'Linked artifact'
+                    csmFile: '$(Pipeline.Workspace)/adf-arm-template/ARMTemplateForFactory.json'
+                    csmParametersFile: '$(Pipeline.Workspace)/adf-arm-template/ARMTemplateParametersForFactory.json'
+                    deploymentMode: 'Incremental'
