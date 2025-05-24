@@ -7,7 +7,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  azureSubscription: 'my-azure-connection'  # Your Azure Resource Manager service connection name
+  azureSubscription: 'my-azure-connection' 
   resourceGroup: 'myResourceGroup'
   dataFactoryName: 'datafactory8414'
   location: 'eastus2'
@@ -30,7 +30,7 @@ stages:
     jobs:
       - deployment: DeployADF
         displayName: 'Deploy ARM Template to ADF'
-        environment: 'Production' # Enables approval gate in DevOps
+        environment: 'Production' 
         strategy:
           runOnce:
             deploy:
